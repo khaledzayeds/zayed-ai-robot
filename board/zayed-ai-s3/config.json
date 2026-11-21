@@ -5,7 +5,8 @@
     {
       "name": "zayed-ai-s3",
       "sdkconfig_append": [
-        "CONFIG_WAKE_WORD_DISABLED=y"
+        "CONFIG_WAKE_WORD_DISABLED=y",
+        "CONFIG_OTA_URL=\"https://api.tenclass.net/xiaozhi/ota/\""
       ]
     }
   ]
