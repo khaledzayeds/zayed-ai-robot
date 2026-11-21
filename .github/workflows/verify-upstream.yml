@@ -1,0 +1,27 @@
+name: Verify pinned Xiaozhi source
+
+on:
+  push:
+    branches: [main, dev/firmware-foundation]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout including upstream submodule
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Check pinned upstream and license
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f upstream/xiaozhi-esp32/CMakeLists.txt
+          test -f upstream/xiaozhi-esp32/LICENSE
+          test -f third_party/xiaozhi-LICENSE.txt
+          test -d upstream/xiaozhi-esp32/main/boards
+          git -C upstream/xiaozhi-esp32 rev-parse HEAD
+          echo 'Upstream source checkout verified; firmware was NOT compiled.'
