@@ -1,0 +1,15 @@
+name: Check board configuration
+
+on:
+  push:
+    branches: [dev/firmware-foundation]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check board manifest and provisional GPIO collisions
+        run: python3 scripts/check_board_config.py
