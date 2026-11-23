@@ -1,0 +1,54 @@
+name: Build Zayed AI S3 firmware
+
+on:
+  push:
+    branches: [dev/firmware-foundation]
+    paths:
+      - 'board/**'
+      - 'scripts/**'
+      - '.gitmodules'
+      - 'upstream/xiaozhi-esp32'
+      - '.github/workflows/build-firmware.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    container:
+      image: espressif/idf:release-v6.1
+    steps:
+      - name: Checkout with pinned upstream
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Apply Zayed custom board
+        shell: bash
+        run: python3 scripts/integrate_board.py
+      - name: Build firmware with ESP-IDF
+        shell: bash
+        working-directory: upstream/xiaozhi-esp32
+        run: |
+          set -euo pipefail
+          source "$IDF_PATH/export.sh"
+          python3 scripts/build.py zayed-ai-s3 --name zayed-ai-s3
+      - name: Upload flashable merged binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: zayed-ai-s3-merged-firmware
+          path: upstream/xiaozhi-esp32/build/merged-binary.bin
+          if-no-files-found: error
+      - name: Upload firmware build logs and metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zayed-ai-s3-build-metadata
+          path: |
+            upstream/xiaozhi-esp32/build/project_description.json
+            upstream/xiaozhi-esp32/build/flasher_args.json
+            upstream/xiaozhi-esp32/sdkconfig
+          if-no-files-found: warn

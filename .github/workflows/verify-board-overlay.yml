@@ -1,0 +1,26 @@
+name: Verify Zayed board overlay
+
+on:
+  push:
+    branches: [dev/firmware-foundation]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  board-overlay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Apply overlay twice
+        run: |
+          python3 scripts/integrate_board.py
+          python3 scripts/integrate_board.py
+      - name: Check board registration
+        run: |
+          grep -q 'BOARD_TYPE_ZAYED_AI_S3' upstream/xiaozhi-esp32/main/Kconfig.projbuild
+          grep -q 'CONFIG_BOARD_TYPE_ZAYED_AI_S3' upstream/xiaozhi-esp32/main/CMakeLists.txt
+          test -f upstream/xiaozhi-esp32/main/boards/zayed-ai-s3/zayed_ai_s3_board.cc
+          echo 'Overlay checks passed. Firmware compilation NOT performed.'

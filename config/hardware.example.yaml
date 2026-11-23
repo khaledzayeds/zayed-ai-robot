@@ -1,0 +1,21 @@
+# Documentation-only hardware configuration; not consumed by firmware yet.
+board:
+  target: esp32s3
+  flash_mb: 16
+  psram_mb: 8
+screen:
+  controller: ST7789
+  interface: SPI
+  width: 172
+  height: 320
+microphone:
+  model: INMP441
+  interface: I2S
+  voltage: 3.3
+amplifier:
+  model: MAX98357A
+  interface: I2S
+speaker:
+  impedance_ohms: 8
+  rated_watts: 3
+# GPIO intentionally omitted until module labels and board pinout are verified.

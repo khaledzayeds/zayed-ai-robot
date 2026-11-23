@@ -1,0 +1,28 @@
+#pragma once
+#include <driver/gpio.h>
+
+// PROVISIONAL DEVELOPMENT GPIO MAP ONLY.
+// Confirm the actual GC9A01 module pin labels and ESP32-S3 board revision before wiring.
+#define AUDIO_INPUT_SAMPLE_RATE 16000
+#define AUDIO_OUTPUT_SAMPLE_RATE 24000
+#define AUDIO_I2S_MIC_GPIO_WS GPIO_NUM_5
+#define AUDIO_I2S_MIC_GPIO_SCK GPIO_NUM_4
+#define AUDIO_I2S_MIC_GPIO_DIN GPIO_NUM_6
+#define AUDIO_I2S_SPK_GPIO_DOUT GPIO_NUM_17
+#define AUDIO_I2S_SPK_GPIO_BCLK GPIO_NUM_15
+#define AUDIO_I2S_SPK_GPIO_LRCK GPIO_NUM_16
+#define BOOT_BUTTON_GPIO GPIO_NUM_0
+#define DISPLAY_SPI_SCK_PIN GPIO_NUM_12
+#define DISPLAY_SPI_MOSI_PIN GPIO_NUM_11
+#define DISPLAY_SPI_CS_PIN GPIO_NUM_10
+#define DISPLAY_DC_PIN GPIO_NUM_9
+#define DISPLAY_RESET_PIN GPIO_NUM_8
+// DO NOT connect/drive BL until backlight voltage and polarity are confirmed.
+#define DISPLAY_BACKLIGHT_PIN GPIO_NUM_7
+#define DISPLAY_WIDTH 240
+#define DISPLAY_HEIGHT 240
+#define DISPLAY_OFFSET_X 0
+#define DISPLAY_OFFSET_Y 0
+#define DISPLAY_MIRROR_X false
+#define DISPLAY_MIRROR_Y false
+#define DISPLAY_SWAP_XY false
