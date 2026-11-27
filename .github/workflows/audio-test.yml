@@ -1,0 +1,26 @@
+name: Audio diagnostics
+on:
+  push:
+    branches: [test/audio-diagnostics]
+    paths: ['audio-test/**', '.github/workflows/audio-test.yml']
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:release-v6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        shell: bash
+        working-directory: audio-test
+        run: |
+          source "$IDF_PATH/export.sh"
+          idf.py set-target esp32s3
+          idf.py build
+          idf.py merge-bin -o audio-test.bin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zayed-audio-test
+          path: audio-test/audio-test.bin
+          if-no-files-found: error
