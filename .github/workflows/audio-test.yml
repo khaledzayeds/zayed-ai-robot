@@ -18,7 +18,9 @@ jobs:
           source "$IDF_PATH/export.sh"
           idf.py set-target esp32s3
           idf.py build
-          idf.py merge-bin -o audio-test.bin
+          idf.py merge-bin -o "$PWD/audio-test.bin"
+          test -s "$PWD/audio-test.bin"
+          ls -lh "$PWD/audio-test.bin"
       - uses: actions/upload-artifact@v4
         with:
           name: zayed-audio-test
