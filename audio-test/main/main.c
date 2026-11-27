@@ -46,13 +46,15 @@ void app_main(void){
  do { if(uart_read_bytes(UART_NUM_0,&c,1,pdMS_TO_TICKS(1000))!=1)c=0; }while(c<'1'||c>'4');
  if(c=='1'){
  for(int k=0;k<125;k++){for(int i=0;i<256;i++)pcm[i]=(int16_t)(2000*sin(6.2831853*440*(k*256+i)/16000.0));play(pcm,256);} 
- for(int i=0;i<256;i++)pcm[i]=0;play(pcm,256);printf("Tone done\n");
+ for(int i=0;i<256;i++){pcm[i]=0;}
+ play(pcm,256);printf("Tone done\n");
  }else if(c=='2'){
  for(int k=0;k<50;k++){int peak[2]={0,0};for(int j=0;j<6;j++){size_t n=0;ESP_ERROR_CHECK(i2s_channel_read(rx,raw,sizeof(raw),&n,1000));for(size_t i=0;i<n/8;i++)for(int ch=0;ch<2;ch++){int v=abs(raw[2*i+ch]>>16);if(v>peak[ch])peak[ch]=v;}}printf("MIC L=%d R=%d\n",peak[0],peak[1]);}
  }else if(c=='3'){
  printf("Speak now (5 seconds)\n");fflush(stdout);
  size_t pos=0;while(pos<80000){size_t n=capture(pcm,channel);if(n>80000-pos)n=80000-pos;for(size_t i=0;i<n;i++)recording[pos+i]=pcm[i];pos+=n;}
- printf("Playback\n");for(pos=0;pos<80000;pos+=256){size_t n=80000-pos;if(n>256)n=256;for(size_t i=0;i<n;i++)pcm[i]=recording[pos+i]/2;play(pcm,n);}for(int i=0;i<256;i++)pcm[i]=0;play(pcm,256);
+ printf("Playback\n");for(pos=0;pos<80000;pos+=256){size_t n=80000-pos;if(n>256)n=256;for(size_t i=0;i<n;i++)pcm[i]=recording[pos+i]/2;play(pcm,n);}for(int i=0;i<256;i++){pcm[i]=0;}
+ play(pcm,256);
  }else channel=1-channel;
  }
 }
